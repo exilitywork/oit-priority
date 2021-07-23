@@ -103,9 +103,7 @@ class PluginOitpriorityCalculation extends CommonDBTM {
             // входит ли категория в раздел ОИТ
             if ($category->fields['itilcategories_id'] == 133 || $category->fields['id'] == 133) {
                 // если приоритет не установлен, то устанваливается в зависмости от категории
-                if (!(isset($item->input['priority']))) {
-                    $item->input['priority'] = in_array($category->fields['id'], [438, 439]) ? 4 : 2;
-                }
+                $item->input['priority'] = in_array($category->fields['id'], [439, 440, 441]) ? 4 : 2;
                 // добавление новой записи в БД
                 $ticket = new self;
                 $ticket->fields['id'] = $item->fields['id'];
@@ -141,7 +139,7 @@ class PluginOitpriorityCalculation extends CommonDBTM {
                 } else {
                     // если приоритет не установлен, то устанваливается в зависмости от категории
                     if (!(isset($item->input['priority']))) {
-                        $item->input['priority'] = in_array($new_cat->fields['id'], [438, 439]) ? 4 : 2;
+                        $item->input['priority'] = in_array($new_cat->fields['id'], [439, 440, 441]) ? 4 : 2;
                     }
                     // обновление записи при смене приоритета
                     if ($item->fields['priority'] != $item->input['priority']) {
