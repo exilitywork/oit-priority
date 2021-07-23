@@ -171,7 +171,7 @@ class PluginOitpriorityCalculation extends CommonDBTM {
                         $ticket->updateInDB(array('status'));
                     }
                 } else {
-                    if ($new_cat->fields['itilcategories_id'] != 133 && $new_cat->fields['id'] != 133 && ($old_cat->fields['itilcategories_id'] == 133 || $old_cat->fields['id'] == 133) && $item->fields['status'] <= 4 && $item->input['status'] <= 4) {
+                    if (isset($new_cat->fields['id']) && $new_cat->fields['itilcategories_id'] != 133 && $new_cat->fields['id'] != 133 && ($old_cat->fields['itilcategories_id'] == 133 || $old_cat->fields['id'] == 133) && $item->fields['status'] <= 4 && $item->input['status'] <= 4) {
                         if (date('Y-m-d H:i:s') > date($ticket->fields['expire_date'])) {
                             $ticket->fields['status'] = 1;
                             $ticket->updateInDB(array('status'));
