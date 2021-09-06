@@ -76,7 +76,7 @@ class PluginOitpriorityCalculation extends CommonDBTM {
                 // изменение интерфейса заявки
                 $ticket = new Ticket;
                 $ticket->getFromDB($item->getID());
-                if ($ticket->fields['itilcategories_id'] > 0) {
+                if (isset($ticket->fields['itilcategories_id']) && $ticket->fields['itilcategories_id'] > 0) {
                     $priority = new self();
                     $priority->getFromDB($ticket->fields['id']);
                     if (!($priority->isNewItem())) {
@@ -125,13 +125,15 @@ class PluginOitpriorityCalculation extends CommonDBTM {
         // инициализации объектов старой и новой категорий, объекта self
         $old_cat = new ITILCategory;
         $old_cat->getFromDB($item->fields['itilcategories_id']);
-        $new_cat = new ITILCategory;
-        $new_cat->getFromDB($item->input['itilcategories_id']);
+        if (isset($item->input['itilcategories_id'])) {
+            $new_cat = new ITILCategory;
+            $new_cat->getFromDB($item->input['itilcategories_id']);
+        }
         $ticket = new self;
         $ticket->getFromDB($item->fields['id']);
 
         // смена статуса записи на В РАБОТЕ
-        if (!(Group_User::isUserInGroup(Session::getLoginUserID(), 5)) && $item->input['status'] < 5) {
+        if (!(Group_User::isUserInGroup(Session::getLoginUserID(), 5)) && isset($item->input['status']) && $item->input['status'] < 5 && isset($item->input['itilcategories_id'])) {
             // входит ли категория в раздел ОИТ
             if ($new_cat->fields['itilcategories_id'] == 133 || $new_cat->fields['id'] == 133) {
                 if ($ticket->isNewItem() && date('Y-m-d H:i:s') > date('2021-07-20 08:44:16')) {
